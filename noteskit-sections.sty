@@ -67,3 +67,25 @@
 	left=10pt,
 	#1
 }
+
+% ┌─────────────────────────────────────────────────────────────────────────────
+% │ \begin{definition}[term]
+% |   definition
+% │ \end{definition}
+% ├─────────────────────────────────────────────────────────────────────────────
+% │ Descripción: Define un entorno de teorema, con letra normal (no itálica)
+% │              Se muestra con la etiqueta "Definición"
+% │              Se numera reiniciándose en cada capítulo
+% │ Configurable: -
+% │ Ejemplo:
+% │   \begin{definition}[Domain-Driven Design]
+% |     \label{def:ddd}	
+% │     Un grupo es un conjunto $G$ junto con una operación...
+% │   \end{definition}
+% └─────────────────────────────────────────────────────────────────────────────
+% Establece el estilo visual para los teoremas que se definen a continuación.
+% El estilo definition usa texto fuente normal, no itálica, a diferencia de
+% plain que usa itálica
+\theoremstyle{definition} 
+% {nombre del entorno}{etiqueta que se imprime}{contador padre}
+\newtheorem{definition}{Definición}[chapter]
