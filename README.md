@@ -39,6 +39,7 @@
 2. Agregar submódulo a repositorio de notas con la rama main por defecto
 
 ```
+git submodule status
 git submodule add -b main git@github.com:MauOcon/latex-notes-kit.git rsc/pckg/template-package
 ```
 
@@ -54,6 +55,40 @@ git commit -m "Actualizar paquete a v1.3.0"
   a. Copiar archivo .cwl a .config/texstudio/completion/user/
   b. Habilitar en Options -> Configure Texstudio... -> Completion
   c. Reiniciar TexStudio
+
+### Cambiar rama del submódulo
+  a. En el repositorio del paquete, crear la rama y subirla al remoto.
+  b. En el repositorio de notas, apuntar el submódulo a esa rama con los comandos que siguen:
+```
+# Primero verificamos la rama actual
+cat .gitmodules 
+# Actualizamos a la rama feature
+git config -f .gitmodules submodule.rsc/pckg/latex-notes-kit.branch feature/mi-cambio
+# Actualizamos el submódulo
+git submodule update --remote
+# Podemos hacer commit de la actualización de rama del submódulo
+git add .gitmodules rsc/pckg/latex-notes-kit
+git commit -m "Submódulo apunta a feature/mi-cambio"
+
+```
+### Quitar submódulo
+
+```
+# 1. Quitar el submódulo del tracking de git
+git submodule deinit -f rsc/pckg/latex-notes-kit
+
+# 2. Quitar la entrada del .gitmodules y el directorio
+git rm -f rsc/pckg/latex-notes-kit
+
+# 3. Limpiar los restos en .git/modules
+rm -rf .git/modules/rsc/pckg/latex-notes-kit
+
+# 4. Commit
+git commit -m "Eliminar submódulo latex-notes-kit"
+
+```
+
+
 
 ### Configurar
 
