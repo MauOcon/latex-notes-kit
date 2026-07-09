@@ -1,0 +1,70 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{rsc/pckg/template-package/noteskit-code}[2026/07/08 NotesKit - Módulo de código]
+
+% ══════════════════════════════════════════════════════════════════════════════
+% MÓDULO: noteskit-code
+% Contiene: comandos y entornos relacionados con código
+%           (resaltado de conceptos, estilos, etc.)
+% Dependencias: xcolor, tcolorbox, fontawesome5 (cargados por noteskit.sty)
+% ══════════════════════════════════════════════════════════════════════════════
+
+% ┌─────────────────────────────────────────────────────────────────────────────
+% │ \nkCodeItem{texto}
+% ├─────────────────────────────────────────────────────────────────────────────
+% │ Descripción: Utilizar para hacer referencia a elementos dentro de archivos
+% |   de código, por ejemplo etiquetas, palabras reservadas, etc.
+% │ Configurable: -
+% │ Ejemplo:
+% │   \nkCodeItem{public}
+% └─────────────────────────────────────────────────────────────────────────────
+\newcommand{\nkCodeItem}[1]{%	
+	\tcbox[
+	on line,
+	colback=gray!15,
+	colframe=gray!15,
+	boxrule=0pt,
+	boxsep=1pt,
+	left=0pt,
+	right=0pt,
+	top=0pt,
+	bottom=0pt
+	]{%
+		\color{Black}
+		%\faFile\space
+		{\fontfamily{SourceCodePro-TLF}%
+			\fontseries{m}%
+			\fontsize{\dimexpr\f@size pt + 0pt\relax}{\dimexpr\f@size pt + 0pt\relax}%
+			\selectfont #1%
+		}%
+	}%	
+}
+
+% ┌─────────────────────────────────────────────────────────────────────────────
+% │ \nkBranch{branch_name}
+% ├─────────────────────────────────────────────────────────────────────────────
+% │ Descripción: Utilizar para hacer referencia a las ramas de un repositorio
+% │ Configurable: -
+% │ Ejemplo:
+% │   \nkBranch{main}
+% └─────────────────────────────────────────────────────────────────────────────
+\newcommand{\nkBranch}[1]{%		
+	\tcbox[
+	on line,
+	colback=gray!15,
+	colframe=gray!15,
+	boxrule=0pt,
+	boxsep=1pt,
+	left=0pt,
+	right=0pt,
+	top=0pt,
+	bottom=0pt
+	]{%
+		\color{Blue}
+		%\faFile\space
+		{\fontfamily{SourceCodePro-TLF}%
+			\fontseries{m}%
+			\fontsize{\dimexpr\f@size pt + 0pt\relax}{\dimexpr\f@size pt + 0pt\relax}%
+			\selectfont #1%
+		}%
+	}%	
+}

@@ -1,0 +1,8 @@
+ % noteskit-local.cfg — configuración de este repo
+\pgfkeys{
+	/noteskit/.cd,
+	materia = Álgebra Lineal,
+	autor = Mauricio,
+	color-principal = Green,
+	color-secundario = Green!30,
+}

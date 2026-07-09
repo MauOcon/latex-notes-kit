@@ -1,0 +1,146 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{rsc/pckg/template-package/noteskit}[2026/07/08 v0.1.0 My notes template custom package]
+
+% ══════════════════════════════════════════════════════════════════════════════
+% SECCIÓN: Módulos
+% CARACTERÍSTICA: Módulos
+% ══════════════════════════════════════════════════════════════════════════════
+% El paquete noteskit está separado en varios módulos que se pueden cargar
+% solo si son necesarios, deben definirse aquí y agregarse a la sección de 
+% alias
+% ──────────────────────────────────────────────────────────────────────────────
+\newif\ifnk@sections
+\newif\ifnk@code
+
+
+
+% ══════════════════════════════════════════════════════════════════════════════
+% SECCIÓN: Configurabilidad (pgfopts + keys)
+% CARACTERÍSTICA: Configurabilidad
+% ══════════════════════════════════════════════════════════════════════════════
+% El paquete acepta opciones clave-valor vía \usepackage[...]{noteskit} y/o
+% un archivo noteskit-local.cfg en el directorio del documento.
+% Todas las keys viven bajo el namespace /noteskit/ para evitar colisiones.
+% Convención de macros internos: prefijo \nk@ (no públicos).
+% Para usar los valores de las keys en el código, reemplazar los valores por el key
+% ──────────────────────────────────────────────────────────────────────────────
+\RequirePackage{pgfopts}
+% --- Keys del paquete ---
+% Cada key define una "variable" que el usuario puede configurar al cargar el paquete.
+% - /.cd — establece el "namespace". Todas las keys quedan bajo /noteskit/, evitando colisiones con otros paquetes.
+% - /.store in — cuando el usuario pasa un valor, se guarda en ese macro (\nk@colorprincipal, etc.). El prefijo \nk@ es convención para macros
+%   internos (no públicos).
+% - /.initial — valor por defecto si el usuario no pasa nada.
+\pgfkeys{
+	/noteskit/.cd,                              % "carpeta" donde viven tus keys
+	%
+	% --- Metadata ---
+	materia/.store in = \nk@materia,            % guarda el valor en un macro interno
+	materia/.initial  = {},                     % default: vacío
+	autor/.store in   = \nk@autor,
+	autor/.initial    = {},
+	%
+	% --- Colores ---
+	color-principal/.store in  = \nk@colorprincipal,
+	color-principal/.initial   = Violet,        % tu color actual
+	color-secundario/.store in = \nk@colorsecundario,
+	color-secundario/.initial  = black!30,      % el que usas en tmplObjective
+	%
+	% --- Módulos ---
+	sections/.is if = nk@sections,            % carga noteskit-sections.sty
+	code/.is if     = nk@code,                % carga noteskit-code.	
+}
+\ProcessPgfPackageOptions{/noteskit}
+
+
+
+% ══════════════════════════════════════════════════════════════════════════════
+% SECCIÓN: Configuración local por repositorio
+% CARACTERÍSTICA: Configurabilidad
+% ══════════════════════════════════════════════════════════════════════════════
+% Carga noteskit-local.cfg si existe en el directorio del .tex principal.
+% Se ejecuta DESPUÉS de \ProcessPgfPackageOptions → el .cfg sobreescribe
+% las opciones inline. Invertir el orden si se desea lo contrario.
+% ──────────────────────────────────────────────────────────────────────────────
+\InputIfFileExists{noteskit-local.cfg}{%
+	\PackageInfo{noteskit}{Configuración local (noteskit-local.cfg) cargada.}%
+}{%
+	\PackageInfo{noteskit}{No se encontró noteskit-local.cfg, usando defaults.}%
+}
+
+
+
+% ══════════════════════════════════════════════════════════════════════════════
+% SECCIÓN: Dependencias
+% ══════════════════════════════════════════════════════════════════════════════
+% Se recomienda declarar las dependencias que utilizará más de un módulo
+% ══════════════════════════════════════════════════════════════════════════════
+\RequirePackage[dvipsnames]{xcolor}
+\RequirePackage{tcolorbox}
+\RequirePackage{fontawesome5} % for icons
+\RequirePackage{hyperref}
+
+
+
+% ══════════════════════════════════════════════════════════════════════════════
+% SECCIÓN: Sistema de prefijos y aliases
+% CARACTERÍSTICA: Prefijos
+% ══════════════════════════════════════════════════════════════════════════════
+% Convención: todos los comandos públicos usan prefijo \nk (noteskit).
+% Los comandos frecuentes tienen un alias corto sin prefijo.
+% Antes de crear un alias, se verifica que no colisione con un comando existente.
+% ──────────────────────────────────────────────────────────────────────────────
+
+% Helper interno: crea un alias verificando que no exista conflicto.
+%   #1 = nombre del alias (sin backslash, ej: pkg)
+%   #2 = comando destino (con backslash, ej: \nkLatexPackage)
+\newcommand{\nk@alias}[2]{%
+	\@ifundefined{#1}{%
+		\expandafter\newcommand\csname #1\endcsname{#2}%
+	}{%
+		\PackageWarning{noteskit}{%
+			Alias \expandafter\string\csname #1\endcsname\space no creado:
+			ya existe. Usa \string#2 en su lugar%
+		}%
+	}%
+}
+
+
+
+% ══════════════════════════════════════════════════════════════════════════════
+% SECCIÓN: Carga de módulos
+% CARACTERÍSTICA: Módulos
+% ══════════════════════════════════════════════════════════════════════════════
+% Cada módulo se carga solo si el usuario lo activó con la key correspondiente.
+% Los módulos asumen que las dependencias comunes ya están disponibles.
+% ──────────────────────────────────────────────────────────────────────────────
+
+\ifnk@sections
+\RequirePackage{noteskit-sections}
+\fi
+
+\ifnk@code
+\RequirePackage{noteskit-code}
+\fi
+
+
+
+% ══════════════════════════════════════════════════════════════════════════════
+% SECCIÓN: Aliases
+% CARACTERÍSTICA: Prefijos
+% ══════════════════════════════════════════════════════════════════════════════
+% Aliases cortos para comandos frecuentes.
+% Solo se crean si el módulo correspondiente está activo.
+% Si hay conflicto, se emite warning y se usa el nombre con prefijo.
+% ──────────────────────────────────────────────────────────────────────────────
+
+% --- Aliases de noteskit-sections ---
+\ifnk@sections
+\nk@alias{pkg}{\nkLatexPackage}
+\fi
+
+% --- Aliases de noteskit-code ---
+\ifnk@code
+\nk@alias{code}{\nkCodeItem}
+\nk@alias{branch}{\nkBranch}
+\fi

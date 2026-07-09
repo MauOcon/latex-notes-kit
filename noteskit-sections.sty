@@ -1,0 +1,69 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{rsc/pckg/template-package/noteskit-sections}[2026/07/08 NotesKit - Módulo de secciones]
+
+% ══════════════════════════════════════════════════════════════════════════════
+% MÓDULO: noteskit-sections
+% Contiene: comandos y entornos para estructurar secciones de notas
+%           (objetivos, paquetes referenciados, etc.)
+% Dependencias: xcolor, tcolorbox, fontawesome5 (cargados por noteskit.sty)
+% ══════════════════════════════════════════════════════════════════════════════
+
+% ┌─────────────────────────────────────────────────────────────────────────────
+% │ \nkLatexPackage{nombre}
+% ├─────────────────────────────────────────────────────────────────────────────
+% │ Descripción: Muestra un nombre de paquete LaTeX con estilo inline (ícono +
+% │              fuente monoespaciada). Útil para mencionar paquetes en el texto.
+% │ Configurable: color-principal (default: Violet) — color del ícono y texto.
+% │ Ejemplo:
+% │   El paquete \nkLatexPackage{tcolorbox} permite crear cajas con estilo.
+% └─────────────────────────────────────────────────────────────────────────────
+\newcommand{\nkLatexPackage}[1]{%		
+	\tcbox[
+	on line,
+	colback=gray!10,
+	colframe=gray!10,
+	boxrule=0pt,
+	boxsep=0pt,
+	left=0pt,
+	right=0pt,
+	top=0pt,
+	bottom=0pt
+	]{%
+		\color{\nk@colorprincipal}
+		\faBox\space
+		{\fontfamily{SourceCodePro-TLF}%
+			\fontseries{el}% Available series: el (extra-light), l (light), m (regular), sb (semibold), b (bold), bx (black).
+			\fontsize{\dimexpr\f@size pt + 0pt\relax}{\dimexpr\f@size pt + 0pt\relax}%
+			\selectfont #1%
+		}%
+	}%
+}
+
+% ┌─────────────────────────────────────────────────────────────────────────────
+% │ \begin{nkObjective}[tcolorbox opts]
+% │   contenido
+% │ \end{nkObjective}
+% ├─────────────────────────────────────────────────────────────────────────────
+% │ Descripción: Caja numerada para declarar objetivos de una sección.
+% │              Se numera automáticamente como sección.objetivo (ej: 2.1).
+% │              El contador se reinicia con cada nueva \section.
+% │ Configurable: color-secundario (default: black!30) — color del borde.
+% │ Ejemplo:
+% │   \begin{nkObjective}
+% │     Comprender las propiedades de los espacios vectoriales.
+% │   \end{nkObjective}
+% └─────────────────────────────────────────────────────────────────────────────
+\RequirePackage{tcolorbox}
+% Se utiliza para resaltar los objetivos de la sección
+\newcounter{objective}[section]
+\renewcommand{\theobjective}{\thesection.\arabic{objective}}
+
+\newtcolorbox{nkObjective}[1][]{%
+	before upper={\refstepcounter{objective}\setlength{\parskip}{0pt}},
+	title={\large\textbf{Objetivo~\theobjective}},
+	colback=white,
+	colframe=\nk@colorsecundario,
+	fontupper=\itshape,
+	left=10pt,
+	#1
+}
