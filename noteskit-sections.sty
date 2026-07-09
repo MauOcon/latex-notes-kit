@@ -90,3 +90,67 @@
 \theoremstyle{definition} 
 % {nombre del entorno}{etiqueta que se imprime}{contador padre}
 \newtheorem{definition}{Definición}[chapter]
+
+% ┌─────────────────────────────────────────────────────────────────────────────
+% │ \begin{nkTable}{|X[l,m,2]|X[c,m,1]|X[l,m,4]|}{Ejemplo de tabla.}{tab:ejemplo}
+    % │   xtbf{Nombre} & \textbf{Acrónimo} & \textbf{Significado} \\ 
+    % │   Java Development Kit & JDK & Software para programadores. \\  
+    % │   Java Runtime Environment & JRE & Software para ejecutar programas Java. \\    
+    % │ \end{nkTable}% │ 
+% ├─────────────────────────────────────────────────────────────────────────────
+% │ Descripción: 
+% │              
+% │              
+% │ Configurable: -
+% │ Ejemplo:
+% │   
+% |     
+% │     
+% │   
+% └─────────────────────────────────────────────────────────────────────────────
+% \nkTable[width]{colspec}{caption}{contenido de filas}
+\newenvironment{nkTable}[4][0.95\textwidth]{%
+    % #1 = width (opcional, default 0.95\textwidth)
+    % #2 = colspec
+    % #3 = caption
+    % #4 = label
+    \def\nk@tbl@caption{#3}%
+    \def\nk@tbl@label{#4}%
+    \begin{table}[H]
+        \centering
+        \begin{tblr}{
+                width = #1,
+                colspec = {#2},
+                hlines,
+                vlines,
+                rows = {m},
+                row{odd} = {bg=gray!30},
+                row{1} = {font=\bfseries, bg=gray!60, c},
+            }
+        }{%
+        \end{tblr}
+        \caption{\nk@tbl@caption}
+        \label{\nk@tbl@label}
+    \end{table}
+}
+
+
+
+
+
+
+% ┌─────────────────────────────────────────────────────────────────────────────
+% │ 
+% | 
+% │ 
+% ├─────────────────────────────────────────────────────────────────────────────
+% │ Descripción: 
+% │              
+% │              
+% │ Configurable: -
+% │ Ejemplo:
+% │   
+% |     
+% │     
+% │   
+% └─────────────────────────────────────────────────────────────────────────────
