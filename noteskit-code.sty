@@ -68,3 +68,62 @@
 		}%
 	}%	
 }
+
+% ┌─────────────────────────────────────────────────────────────────────────────
+% │ 
+% | \nkCode
+% │ 
+% ├─────────────────────────────────────────────────────────────────────────────
+% │ Descripción: Utilizar para resaltar partes de código dentro del texto
+% │              
+% │              
+% │ Configurable: -
+% │ Ejemplo:
+% │   
+% |     \nkCode{class}
+% │     
+% │   
+% └─────────────────────────────────────────────────────────────────────────────
+\RequirePackage{lstcustom}
+\DeclareRobustCommand{\nkCode}{\lstinline[style=terminal]}
+
+% ┌─────────────────────────────────────────────────────────────────────────────
+% │ 
+% | \nkCmd
+% │ 
+% ├─────────────────────────────────────────────────────────────────────────────
+% │ Descripción: Utilizar para resaltar comandos de la línea de comandos dentro
+% │              del texto
+% │              
+% │ Configurable: -
+% │ Ejemplo:
+% │   
+% |     \nkCmd{git init}
+% │     
+% │   
+% └─────────────────────────────────────────────────────────────────────────────
+\lstdefinestyle{cmdinline}{
+% size: \tiny, \scriptsize, \footnotesize, \small, \normalsize, \large
+% weight:  \bfseries (bold), \mdseries (normal)
+basicstyle=\small\ttfamily\mdseries\color{OliveGreen},
+breaklines=true,
+language={}    
+}
+\DeclareRobustCommand{\nkCmd}{\texttt{\$}\,\lstinline[style=cmdinline]}
+
+% ┌─────────────────────────────────────────────────────────────────────────────
+% │ 
+% | 
+% │ 
+% ├─────────────────────────────────────────────────────────────────────────────
+% │ Descripción: 
+% │              
+% │              
+% │ Configurable: -
+% │ Ejemplo:
+% │   
+% |     
+% │     
+% │   
+% └─────────────────────────────────────────────────────────────────────────────
+
