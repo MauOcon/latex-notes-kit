@@ -84,8 +84,13 @@
 % │     
 % │   
 % └─────────────────────────────────────────────────────────────────────────────
+\RequirePackage[T1]{fontenc}
 \RequirePackage{lstcustom}
-\DeclareRobustCommand{\nkCode}{\lstinline[style=terminal]}
+\RequirePackage{inconsolata}
+\RequirePackage{codehigh}
+\newcommand{\nkCode}[1]{%
+    {\ttfamily\small\color{darkgray}\fakeverb{#1}}%
+}
 
 % ┌─────────────────────────────────────────────────────────────────────────────
 % │ 
@@ -102,14 +107,9 @@
 % │     
 % │   
 % └─────────────────────────────────────────────────────────────────────────────
-\lstdefinestyle{cmdinline}{
-% size: \tiny, \scriptsize, \footnotesize, \small, \normalsize, \large
-% weight:  \bfseries (bold), \mdseries (normal)
-basicstyle=\small\ttfamily\mdseries\color{OliveGreen},
-breaklines=true,
-language={}    
+\newcommand{\nkCmd}[1]{%
+    \texttt{\$}\,{\ttfamily\small\color{OliveGreen}\fakeverb{#1}}%
 }
-\DeclareRobustCommand{\nkCmd}{\texttt{\$}\,\lstinline[style=cmdinline]}
 
 % ┌─────────────────────────────────────────────────────────────────────────────
 % │ 
