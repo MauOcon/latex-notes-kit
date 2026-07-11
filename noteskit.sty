@@ -11,7 +11,7 @@
 % ──────────────────────────────────────────────────────────────────────────────
 \newif\ifnk@sections
 \newif\ifnk@code
-
+\newif\ifnk@showAnswers
 
 
 % ══════════════════════════════════════════════════════════════════════════════
@@ -49,6 +49,9 @@
 	% --- Módulos ---
 	sections/.is if = nk@sections,            % carga noteskit-sections.sty
 	code/.is if     = nk@code,                % carga noteskit-code.	
+    %
+    % --- Preguntas ---
+    show-answers/.is if = nk@showAnswers,
 }
 \ProcessPgfPackageOptions{/noteskit}
 

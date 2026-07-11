@@ -134,6 +134,69 @@
     \end{table}
 }
 
+% ┌─────────────────────────────────────────────────────────────────────────────
+% │ \begin{nkQuestion}{texto de la pregunta}
+% │   \nkAnswer[correct]{respuesta correcta}
+% │   \nkAnswer{respuesta incorrecta}
+% │ \end{nkQuestion}
+% ├─────────────────────────────────────────────────────────────────────────────
+% │ Descripción: Entorno para preguntas con una o más respuestas.
+% │              Soporta opción múltiple (una o varias correctas) y respuesta única.
+% │              Con el flag \nk@showAnswersfalse se ocultan las marcas de
+% │              correcto/incorrecto (modo estudio).
+% │ Configurable: -
+% │ Ejemplo:
+% │   \begin{nkQuestion}{¿Qué es un submódulo de git?}
+% │     \nkAnswer[correct]{Un repositorio dentro de otro repositorio.}
+% │     \nkAnswer{Una rama protegida.}
+% │   \end{nkQuestion}
+% └─────────────────────────────────────────────────────────────────────────────
+
+% Flag para mostrar/ocultar respuestas (true = muestra, false = oculta)
+%\newif\ifnk@showAnswers
+%\nk@showAnswerstrue
+
+% Contador de preguntas (se reinicia por sección)
+\newcounter{nkquestion}[section]
+\renewcommand{\thenkquestion}{\thesection.\arabic{nkquestion}}
+
+% Entorno de pregunta
+%   #1 = (opcional) tipo: "open" para pregunta abierta. Default: opción múltiple.
+%   #2 = texto de la pregunta
+\newenvironment{nkQuestion}[2][]{%
+    \def\nk@question@type{#1}%
+    \def\nk@question@open{open}%
+    \refstepcounter{nkquestion}%
+    \par\medskip\noindent
+    \textbf{Pregunta~\thenkquestion:} #2%
+    \begin{itemize}
+    }{%
+    \end{itemize}
+    \medskip
+}
+
+% Comando de respuesta
+\newcommand{\nkAnswer}[2][]{%
+    \def\nk@tmp{#1}%
+    \def\nk@correct{correct}%
+    \ifnk@showAnswers
+    % Modo respuestas: muestra check/cross
+    \ifx\nk@tmp\nk@correct
+    \item[\textcolor{green!60!black}{\faCheck}] #2%
+    \else
+    \item[\textcolor{red!70!black}{\faTimes}] #2%
+    \fi
+    \else
+    % Modo estudio:
+    \ifx\nk@question@type\nk@question@open
+    % Pregunta abierta: muestra línea en blanco
+    \item \rule{5cm}{0.4pt}%
+    \else
+    % Opción múltiple: muestra opciones sin marcar
+    \item #2%
+    \fi
+    \fi
+}
 
 
 
