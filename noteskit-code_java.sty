@@ -1,0 +1,54 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{rsc/pckg/template-package/noteskit-code_java}[2026/07/08 NotesKit - Módulo de código java]
+
+\RequirePackage{listings}
+\RequirePackage{xcolor}
+
+% Intellij dark theme 
+\definecolor{darculaBackground}{HTML}{2B2B2B}
+\definecolor{darculaForeground}{HTML}{A9B7C6}
+\definecolor{darculaComment}{HTML}{808080}
+\definecolor{darculaKeyword}{HTML}{CC7832}
+\definecolor{darculaString}{HTML}{6A8759}
+\definecolor{darculaNumber}{HTML}{6897BB}
+% Configure listings
+\lstdefinestyle{IntelliJDark}{
+    backgroundcolor=\color{darculaBackground},
+    basicstyle=\color{darculaForeground}\ttfamily\footnotesize,
+    commentstyle=\color{darculaComment}\itshape,
+    keywordstyle=\color{darculaKeyword}\bfseries,
+    stringstyle=\color{darculaString},
+    numberstyle=\tiny\color{darculaComment},
+    stepnumber=1,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    frame=single,
+    rulecolor=\color{darculaBackground},
+    tabsize=4,
+    breaklines=true,
+    breakatwhitespace=true,
+    captionpos=b
+}
+
+\lstdefinestyle{IntelliJLight}{
+    backgroundcolor=\color{white},
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    captionpos=b,
+    commentstyle=\color{gray!60!black}\itshape,
+    keywordstyle=\color{blue!80!black}\bfseries,
+    identifierstyle=\color{black},
+    stringstyle=\color{orange!80!black},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4,
+    frame=single,
+    rulecolor=\color{gray!30}
+}

@@ -12,6 +12,7 @@
 \newif\ifnk@sections
 \newif\ifnk@code
 \newif\ifnk@showAnswers
+\newif\ifnk@codejava
 
 
 % ══════════════════════════════════════════════════════════════════════════════
@@ -49,6 +50,7 @@
 	% --- Módulos ---
 	sections/.is if = nk@sections,            % carga noteskit-sections.sty
 	code/.is if     = nk@code,                % carga noteskit-code.	
+    codejava/.is if     = nk@codejava,                % carga noteskit-code.	
     %
     % --- Preguntas ---
     show-answers/.is if = nk@showAnswers,
@@ -126,7 +128,9 @@
 \RequirePackage{noteskit-code}
 \fi
 
-
+\ifnk@code
+\RequirePackage{noteskit-code_java}
+\fi
 
 % ══════════════════════════════════════════════════════════════════════════════
 % SECCIÓN: Aliases
