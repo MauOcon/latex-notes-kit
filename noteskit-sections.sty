@@ -218,8 +218,9 @@
 \newcommand{\nkRefcap}[2]{\item \textit{#2} \cite{#1}}
 
 % Para mostrar que la palabra se usa con un sentido especial: irónicas, impropias, vulgares.
-\newcommand{\nkSpecial}[2]{\item \textit{#2} \cite{#1}}
-
+\newcommand{\nkSpecial}[1]{%
+    {\itshape{#1}}%
+}
 % ┌─────────────────────────────────────────────────────────────────────────────
 % │ 
 % | 
