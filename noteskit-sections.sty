@@ -221,6 +221,27 @@
 \newcommand{\nkSpecial}[1]{%
     {\itshape{#1}}%
 }
+
+% Para resaltar textos con tipo marcatextos, el caso de uso es resaltar información correcta, errónea, para llamar la atención y faltante
+\RequirePackage{soul}
+\newcommand{\nkCorrect}[1]{{\sethlcolor{green!25}\hl{#1}}}
+\newcommand{\nkError}[1]{{\sethlcolor{red!25}\hl{#1}}}
+\newcommand{\nkAttention}[1]{{\sethlcolor{yellow!25}\hl{#1}}}
+\newcommand{\nkMissing}[1]{{\sethlcolor{lightgray}\hl{#1}}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 % ┌─────────────────────────────────────────────────────────────────────────────
 % │ 
 % | 
