@@ -229,6 +229,16 @@
 \newcommand{\nkAttention}[1]{{\sethlcolor{yellow!25}\hl{#1}}}
 \newcommand{\nkMissing}[1]{{\sethlcolor{lightgray}\hl{#1}}}
 
+% Para listas ordenadas y no ordenadas
+% --- Definición del comando ---
+\newcounter{paso}
+%\newcommand{\paso}{\stepcounter{paso}\bigskip\noindent\textbf{Paso \thepaso.} }
+\newcommand{\nkStep}{\stepcounter{paso}%
+  \ifnum\value{paso}=1\noindent\else\bigskip\noindent\fi
+  \textbf{Paso \thepaso.} }
+\newcommand{\nkRestartSteps}{\setcounter{paso}{0}}
+
+\newcommand{\nkElement}{\bigskip\noindent\textbullet\ \textbf}
 
 
 
