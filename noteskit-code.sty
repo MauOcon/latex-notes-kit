@@ -40,6 +40,38 @@
 }
 
 % ┌─────────────────────────────────────────────────────────────────────────────
+% │ \nkRepo{nombre}
+% ├─────────────────────────────────────────────────────────────────────────────
+% │ Descripción: Muestra un nombre de un repositorio de código con estilo inline (ícono +
+% │              fuente monoespaciada). Útil para mencionar paquetes en el texto.
+% │ Configurable: color-principal (default: Violet) — color del ícono y texto.
+% │ Ejemplo:
+% │   El repo \nkRepo{main} despliega a producción.
+% └─────────────────────────────────────────────────────────────────────────────
+\definecolor{repocolor}{HTML}{F05032}
+\newcommand{\nkRepo}[1]{%		
+  \tcbox[
+  on line,
+  colback=gray!10,
+  colframe=gray!10,
+  boxrule=0pt,
+  boxsep=0pt,
+  left=0pt,
+  right=0pt,
+  top=0pt,
+  bottom=0pt
+  ]{%
+    \color{repocolor}
+    \faGit*\space
+    {\fontfamily{SourceCodePro-TLF}%
+      \fontseries{el}% Available series: el (extra-light), l (light), m (regular), sb (semibold), b (bold), bx (black).
+      \fontsize{\dimexpr\f@size pt + 0pt\relax}{\dimexpr\f@size pt + 0pt\relax}%
+      \selectfont #1%
+    }%
+  }%
+}
+
+% ┌─────────────────────────────────────────────────────────────────────────────
 % │ \nkBranch{branch_name}
 % ├─────────────────────────────────────────────────────────────────────────────
 % │ Descripción: Utilizar para hacer referencia a las ramas de un repositorio
