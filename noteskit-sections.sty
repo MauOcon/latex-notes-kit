@@ -243,6 +243,21 @@
 
 
 
+% Para listas de problemas
+% --- Definición del comando ---
+\newcounter{nkproblemgroup}
+\newcounter{nkproblem}
+
+\newcommand{\nkRestartProblems}[1]{%
+  \setcounter{nkproblemgroup}{#1}%
+  \setcounter{nkproblem}{0}}
+
+\newcommand{\nkProblem}{\stepcounter{nkproblem}%
+  \ifnum\value{nkproblem}=1\noindent\else\bigskip\noindent\fi
+  \textbf{P \thenkproblemgroup.\thenkproblem} }
+
+
+
 
 
 
