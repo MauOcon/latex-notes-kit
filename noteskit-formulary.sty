@@ -1,0 +1,200 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{rsc/pckg/template-package/noteskit-formulary}[2026/08/11 NotesKit - Módulo de formularios]
+
+% ══════════════════════════════════════════════════════════════════════════════
+% MÓDULO: noteskit-formulary
+% Contiene: entorno y comandos para crear formularios de fórmulas organizados
+%           en columnas, con soporte de imágenes, título y formato configurable.
+% Dependencias: multicol, graphicx, amsmath, etoolbox (cargados por noteskit.sty
+%               o el documento principal)
+% ══════════════════════════════════════════════════════════════════════════════
+
+\RequirePackage{multicol}
+\RequirePackage{graphicx}
+\RequirePackage{amsmath}
+\RequirePackage{etoolbox}
+
+% ──────────────────────────────────────────────────────────────────────────────
+% Flags internos
+% ──────────────────────────────────────────────────────────────────────────────
+\newif\ifnk@formulary@istable % true si el formato actual es tabla
+\nk@formulary@istablefalse
+
+
+% ┌─────────────────────────────────────────────────────────────────────────────
+% │ \begin{nkFormularyZone}
+% │   \begin{nkFormulary}[...] ... \end{nkFormulary}
+% │   \begin{nkFormulary}[...] ... \end{nkFormulary}
+% │ \end{nkFormularyZone}
+% ├─────────────────────────────────────────────────────────────────────────────
+% │ Descripción: Entorno wrapper que delimita una zona de formularios.
+% │   - Ejecuta \clearpage al inicio (separa del texto anterior).
+% │   - Aplica \pagestyle{empty} (sin header/footer/número).
+% │   - Ejecuta \clearpage al final (separa del texto posterior).
+% │   - Los nkFormulary internos fluyen libremente sin saltos forzados.
+% │
+% │ Ejemplo:
+% │   \begin{nkFormularyZone}
+% │     \begin{nkFormulary}[columns=3, title=Cinemática]
+% │       \nkFormula{Velocidad}{$v = \frac{dx}{dt}$}
+% │     \end{nkFormulary}
+% │     \begin{nkFormulary}[columns=2, title=Estática, format=table]
+% │       \nkFormula{Equilibrio}{$\sum F = 0$}
+% │     \end{nkFormulary}
+% │   \end{nkFormularyZone}
+% └─────────────────────────────────────────────────────────────────────────────
+\newenvironment{nkFormularyZone}{%
+  \clearpage
+  \pagestyle{empty}%
+}{%
+  \clearpage
+  \pagestyle{headings}%
+}
+
+
+% ┌─────────────────────────────────────────────────────────────────────────────
+% │ \begin{nkFormulary}[opciones clave-valor]
+% │   \nkFormula{nombre}{fórmula}
+% │   \nkFormula[imagen.png]{nombre}{fórmula}
+% │ \end{nkFormulary}
+% ├─────────────────────────────────────────────────────────────────────────────
+% │ Descripción: Entorno para crear un formulario de fórmulas.
+% │   - Debe usarse dentro de nkFormularyZone.
+% │   - Organiza las fórmulas en N columnas o en tabla.
+% │   - NO hace \clearpage por sí mismo.
+% │
+% │ Opciones (clave=valor):
+% │   columns  = 3        (número de columnas, default: 3)
+% │   title    = {}       (título opcional del formulario)
+% │   format   = columns  (columns | table)
+% │   colsep   = 4pt      (separación entre columnas)
+% │   imwidth  = 2.5cm    (ancho por defecto de imágenes)
+% │
+% │ Ejemplo:
+% │   \begin{nkFormulary}[columns=3, title=Cinemática, format=columns]
+% │     \nkFormula{Velocidad}{$v = \frac{dx}{dt}$}
+% │     \nkFormula[rsc/img/vel.png]{MRU}{$x = x_0 + vt$}
+% │   \end{nkFormulary}
+% └─────────────────────────────────────────────────────────────────────────────
+
+% --- Keys del entorno ---
+\pgfkeys{
+  /nk/formulary/.cd,
+  columns/.store in  = \nk@formulary@cols,
+  columns/.initial   = 3,
+  title/.store in    = \nk@formulary@title,
+  title/.initial     = {},
+  format/.is choice,
+  format/columns/.code = {\nk@formulary@istablefalse},
+  format/table/.code   = {\nk@formulary@istabletrue},
+  format            = columns,
+  colsep/.store in   = \nk@formulary@colsep,
+  colsep/.initial    = 4pt,
+  imwidth/.store in  = \nk@formulary@imwidth,
+  imwidth/.initial   = 2.5cm,
+}
+
+% --- Entorno principal ---
+\newenvironment{nkFormulary}[1][]{%
+  % Procesar opciones (resetear defaults primero)
+  \pgfkeys{/nk/formulary/.cd,
+    columns=3, title={}, format=columns, colsep=4pt, imwidth=2.5cm, #1}%
+  %
+  % Configurar separación de columnas
+  \setlength{\columnsep}{\nk@formulary@colsep}%
+  %
+  % Título (si se proporcionó)
+  \def\nk@formulary@tmp@title{\nk@formulary@title}%
+  \ifx\nk@formulary@tmp@title\empty\else
+    \begin{center}
+      {\large\bfseries\nk@formulary@title}%
+    \end{center}
+    \vspace{-0.5em}
+    \hrule height 0.4pt\relax
+    \vspace{0.5em}
+  \fi
+  %
+  % Elegir formato según el flag booleano
+  \ifnk@formulary@istable
+    % Formato tabla
+    \begingroup
+    \small
+    \setlength{\tabcolsep}{4pt}%
+    \begin{center}
+    \begin{tabular}{@{} l l @{}}
+    \hline
+    \textbf{Nombre} & \textbf{Fórmula} \\
+    \hline
+  \else
+    % Formato columnas
+    \begin{multicols}{\nk@formulary@cols}
+    \small
+    \setlength{\parindent}{0pt}%
+    \setlength{\parskip}{0.4em}%
+  \fi
+}{%
+  % Cerrar el entorno correspondiente según el flag
+  \ifnk@formulary@istable
+    \hline
+    \end{tabular}
+    \end{center}
+    \endgroup
+  \else
+    \end{multicols}
+  \fi
+}
+
+
+% ┌─────────────────────────────────────────────────────────────────────────────
+% │ \nkFormula[imagen]{nombre}{fórmula}
+% ├─────────────────────────────────────────────────────────────────────────────
+% │ Descripción: Agrega una fórmula al formulario.
+% │   - nombre:  texto descriptivo de la fórmula
+% │   - fórmula: expresión matemática
+% │   - imagen:  (opcional) ruta a una imagen asociada
+% │
+% │ En formato columnas: se muestra como bloque compacto.
+% │ En formato tabla: se muestra como fila de la tabla.
+% │
+% │ Ejemplo:
+% │   \nkFormula{Velocidad}{$v = \frac{dx}{dt}$}
+% │   \nkFormula[rsc/img/mru.png]{MRU}{$x = x_0 + vt$}
+% └─────────────────────────────────────────────────────────────────────────────
+\newcommand{\nkFormula}[3][]{%
+  \ifnk@formulary@istable
+    % --- Formato tabla ---
+    \def\nk@tmp@img{#1}%
+    \ifx\nk@tmp@img\empty
+      \textbf{#2} & #3 \\
+    \else
+      \textbf{#2} & #3 \hfill \raisebox{-0.4\height}{\includegraphics[width=\nk@formulary@imwidth]{#1}} \\
+    \fi
+  \else
+    % --- Formato columnas ---
+    \noindent
+    {\bfseries\small #2}%
+    \par\nopagebreak
+    \vspace{-0.3em}%
+    #3%
+    \def\nk@tmp@img{#1}%
+    \ifx\nk@tmp@img\empty\else
+      \par\nopagebreak
+      \vspace{0.2em}%
+%      \noindent\includegraphics[width=\nk@formulary@imwidth]{#1}% Alineada a la izquierda
+      {\centering\includegraphics[width=\nk@formulary@imwidth]{#1}\par}% Centrada
+    \fi
+    \par
+    \vspace{0.3em}%
+    \hrule height 0.1pt\relax
+    \vspace{0.4em}%
+  \fi
+}
+
+% ┌─────────────────────────────────────────────────────────────────────────────
+% │ \nkFormulaInline{nombre}{fórmula}
+% ├─────────────────────────────────────────────────────────────────────────────
+% │ Descripción: Versión compacta sin separador, para fórmulas muy cortas.
+% └─────────────────────────────────────────────────────────────────────────────
+\newcommand{\nkFormulaInline}[2]{%
+  \noindent{\bfseries\footnotesize #1:}\enspace #2\par
+}

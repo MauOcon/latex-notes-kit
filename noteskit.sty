@@ -13,6 +13,7 @@
 \newif\ifnk@code
 \newif\ifnk@showAnswers
 \newif\ifnk@codejava
+\newif\ifnk@formulary
 
 
 % ══════════════════════════════════════════════════════════════════════════════
@@ -50,7 +51,8 @@
 	% --- Módulos ---
 	sections/.is if = nk@sections,            % carga noteskit-sections.sty
 	code/.is if     = nk@code,                % carga noteskit-code.	
-    codejava/.is if     = nk@codejava,                % carga noteskit-code.	
+    codejava/.is if     = nk@codejava,                % carga noteskit-code.
+    formulary/.is if 		= nk@formulary,			% carga noteskit-formulary	
     %
     % --- Preguntas ---
     show-answers/.is if = nk@showAnswers,
@@ -132,6 +134,10 @@
 \RequirePackage{noteskit-code_java}
 \fi
 
+\ifnk@formulary
+\RequirePackage{noteskit-formulary}
+\fi
+
 % ══════════════════════════════════════════════════════════════════════════════
 % SECCIÓN: Aliases
 % CARACTERÍSTICA: Prefijos
@@ -153,4 +159,10 @@
 \nk@alias{code}{\nkCode}
 \nk@alias{cmd}{\nkCmd}
 \nk@alias{branch}{\nkBranch}
+\fi
+
+% --- Aliases de noteskit-formulary ---
+\ifnk@formulary
+\nk@alias{formula}{\nkFormula}
+\nk@alias{formulaInline}{\nkFormulaInline}
 \fi
