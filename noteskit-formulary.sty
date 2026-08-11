@@ -43,11 +43,22 @@
 % │     \end{nkFormulary}
 % │   \end{nkFormularyZone}
 % └─────────────────────────────────────────────────────────────────────────────
-\newenvironment{nkFormularyZone}{%
+% --- Keys de la zona ---
+\pgfkeys{
+  /nk/formularyzone/.cd,
+  margin/.store in = \nk@formularyzone@margin,
+  margin/.initial  = 1cm,
+}
+
+\newenvironment{nkFormularyZone}[1][]{%
+  \pgfkeys{/nk/formularyzone/.cd, margin=1cm, #1}%
   \clearpage
   \pagestyle{empty}%
+  \newgeometry{top=\nk@formularyzone@margin, bottom=\nk@formularyzone@margin,
+               left=\nk@formularyzone@margin, right=\nk@formularyzone@margin}%
 }{%
   \clearpage
+  \restoregeometry
   \pagestyle{headings}%
 }
 
