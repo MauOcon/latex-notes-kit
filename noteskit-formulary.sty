@@ -198,3 +198,30 @@
 \newcommand{\nkFormulaInline}[2]{%
   \noindent{\bfseries\footnotesize #1:}\enspace #2\par
 }
+
+
+\newcommand{\nkFormulaGroup}[3][]{%
+  \ifnk@formulary@istable
+  % En formato tabla no aplica bien, se muestra como una fila con multilínea
+  \textbf{#2} & #3 \\
+  \else
+  \noindent
+  {\bfseries\small #2}%
+  \par\nopagebreak
+  \vspace{-0.3em}%
+  \begin{tabular}[t]{@{} l @{}}
+    #3
+  \end{tabular}%
+  \def\nk@tmp@img{#1}%
+  \ifx\nk@tmp@img\empty\else
+  \par\nopagebreak
+  \vspace{0.2em}%
+%  \noindent\includegraphics[width=\nk@formulary@imwidth]{#1}% Alineada a la izquierda
+  {\centering\includegraphics[width=\nk@formulary@imwidth]{#1}\par}% Centrada
+  \fi
+  \par
+  \vspace{0.3em}%
+  \hrule height 0.1pt\relax
+  \vspace{0.4em}%
+  \fi
+}
