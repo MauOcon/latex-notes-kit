@@ -232,3 +232,173 @@
   \vspace{0.8em}%
   \fi
 }
+
+
+% ══════════════════════════════════════════════════════════════════════════════
+% SECCIÓN: EXERCISE SET
+% Contiene: entorno y comandos para crear listas de ejercicios numerados,
+%           con soporte multicolumna, agrupación por tema y respuestas
+%           opcionales (controladas por flag local show-answers).
+% ══════════════════════════════════════════════════════════════════════════════
+
+% ──────────────────────────────────────────────────────────────────────────────
+% Contadores y flags internos
+% ──────────────────────────────────────────────────────────────────────────────
+\newcounter{nk@exercise}
+\newif\ifnk@exerciseset@answers
+
+
+% ┌─────────────────────────────────────────────────────────────────────────────
+% │ \begin{nkExerciseSet}[opciones clave-valor]
+% │   \nkExercise Enunciado...
+% │   \nkExercise Otro enunciado...
+% │ \end{nkExerciseSet}
+% ├─────────────────────────────────────────────────────────────────────────────
+% │ Descripción: Entorno para crear una lista de ejercicios.
+% │   - Numera automáticamente cada \nkExercise.
+% │   - Soporta multicolumna.
+% │   - El prefijo (capítulo, sección, etc.) se pasa manualmente.
+% │   - Flag local show-answers para mostrar/ocultar respuestas.
+% │
+% │ Opciones (clave=valor):
+% │   prefix       = {}       (prefijo numérico manual: 3 → "3.1, 3.2...")
+% │   columns      = 1        (número de columnas, default: 1)
+% │   colsep       = 10pt     (separación entre columnas)
+% │   start        = 1        (número inicial del contador)
+% │   show-answers = false     (mostrar respuestas, default: false)
+% │
+% │ Ejemplo:
+% │   \begin{nkExerciseSet}[prefix=3, columns=2]
+% │     \nkExercise Resuelve $\int x^2\,dx$.
+% │     \nkExercise Calcula $\int_0^1 e^x\,dx$.
+% │   \end{nkExerciseSet}
+% │
+% │   % Con agrupación y respuestas:
+% │   \begin{nkExerciseSet}[prefix=4, show-answers]
+% │     \nkExerciseGroup{Integrales}
+% │     \nkExercise Resuelve $\int x^2\,dx$.
+% │     \nkExerciseAnswer{$\frac{x^3}{3} + C$}
+% │     \nkExercise Calcula $\int_0^1 e^x\,dx$.
+% │     \nkExerciseAnswer{$e - 1$}
+% │   \end{nkExerciseSet}
+% └─────────────────────────────────────────────────────────────────────────────
+
+% --- Keys del entorno ---
+\pgfkeys{
+  /nk/exerciseset/.cd,
+  prefix/.store in   = \nk@exerciseset@prefix,
+  prefix/.initial    = {},
+  columns/.store in  = \nk@exerciseset@cols,
+  columns/.initial   = 1,
+  colsep/.store in   = \nk@exerciseset@colsep,
+  colsep/.initial    = 10pt,
+  start/.store in    = \nk@exerciseset@start,
+  start/.initial     = 1,
+  show-answers/.is if = nk@exerciseset@answers,
+  show-answers/.default = true,
+}
+
+% --- Macro interna: imprime el número formateado ---
+\newcommand{\nk@exercise@number}{%
+  \def\nk@tmp@prefix{\nk@exerciseset@prefix}%
+  \ifx\nk@tmp@prefix\empty
+    \arabic{nk@exercise}%
+  \else
+    \nk@exerciseset@prefix.\arabic{nk@exercise}%
+  \fi
+}
+
+% --- Entorno principal ---
+\newenvironment{nkExerciseSet}[1][]{%
+  % Procesar opciones
+  \pgfkeys{/nk/exerciseset/.cd,
+    prefix={}, columns=1, colsep=10pt, start=1, show-answers=false, #1}%
+  %
+  % Inicializar contador (start - 1 porque \nkExercise hace stepcounter)
+  \setcounter{nk@exercise}{\numexpr\nk@exerciseset@start - 1\relax}%
+  %
+  % Configurar columnsep
+  \setlength{\columnsep}{\nk@exerciseset@colsep}%
+  %
+  % Abrir multicols si columns > 1
+  \ifnum\nk@exerciseset@cols>1
+    \begin{multicols}{\nk@exerciseset@cols}
+  \fi
+  \setlength{\parindent}{0pt}%
+}{%
+  % Cerrar multicols si columns > 1
+  \ifnum\nk@exerciseset@cols>1
+    \end{multicols}
+  \fi
+}
+
+
+% ┌─────────────────────────────────────────────────────────────────────────────
+% │ \nkExercise
+% ├─────────────────────────────────────────────────────────────────────────────
+% │ Descripción: Imprime el número del ejercicio y permite escribir inline.
+% │   - Incrementa el contador automáticamente.
+% │   - El texto que sigue queda en la misma línea que el número.
+% │   - Se separa del ejercicio anterior con \medskip.
+% │
+% │ Ejemplo:
+% │   \nkExercise Resuelve $\int x^2\,dx$.
+% │   \nkExercise Calcula la derivada de $f(x) = e^{x^2}$.
+% └─────────────────────────────────────────────────────────────────────────────
+\newcommand{\nkExercise}{%
+  \stepcounter{nk@exercise}%
+  \ifnum\value{nk@exercise}=1\noindent\else\medskip\noindent\fi
+  \textbf{\nk@exercise@number.}\enspace
+}
+
+
+% ┌─────────────────────────────────────────────────────────────────────────────
+% │ \nkExerciseGroup[restart]{título}
+% ├─────────────────────────────────────────────────────────────────────────────
+% │ Descripción: Imprime un subtítulo para agrupar ejercicios por tema.
+% │   - No reinicia el contador por defecto.
+% │   - Con la opción [restart], reinicia el sub-contador a 0.
+% │
+% │ Ejemplo:
+% │   \nkExerciseGroup{Integrales definidas}
+% │   \nkExercise ...
+% │
+% │   \nkExerciseGroup[restart]{Integrales impropias}
+% │   \nkExercise ...   % reinicia numeración
+% └─────────────────────────────────────────────────────────────────────────────
+\newcommand{\nkExerciseGroup}[2][]{%
+  \def\nk@tmp@restart{#1}%
+  \def\nk@val@restart{restart}%
+  \ifx\nk@tmp@restart\nk@val@restart
+    \setcounter{nk@exercise}{0}%
+  \fi
+  \bigskip\noindent
+  {\bfseries\large #2}%
+  \par\nopagebreak
+  \vspace{0.4em}%
+  \hrule height 0.3pt\relax
+  \vspace{0.6em}%
+}
+
+
+% ┌─────────────────────────────────────────────────────────────────────────────
+% │ \nkExerciseAnswer{respuesta}
+% ├─────────────────────────────────────────────────────────────────────────────
+% │ Descripción: Muestra la respuesta de un ejercicio.
+% │   - Controlado por el flag local show-answers del nkExerciseSet.
+% │   - Si show-answers=true: muestra la respuesta con ícono y color.
+% │   - Si show-answers=false: no muestra nada (modo estudio/examen).
+% │
+% │ Ejemplo:
+% │   \nkExercise Resuelve $\int x^2\,dx$.
+% │   \nkExerciseAnswer{$\frac{x^3}{3} + C$}
+% └─────────────────────────────────────────────────────────────────────────────
+\newcommand{\nkExerciseAnswer}[1]{%
+  \ifnk@exerciseset@answers
+    \par\nopagebreak
+    \vspace{0.2em}%
+    \noindent\hspace{1.5em}%
+    {\small\textbf{Respuesta:}\enspace #1}%
+    \par
+  \fi
+}
