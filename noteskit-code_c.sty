@@ -1,0 +1,108 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{rsc/pckg/template-package/noteskit-code_c}[2026/10/11 NotesKit - Módulo de código C]
+
+% ══════════════════════════════════════════════════════════════════════════════
+% MÓDULO: noteskit-code_c
+% Contiene: estilos de listings para resaltado de sintaxis del lenguaje C.
+% Dependencias: listings, xcolor (xcolor también lo carga noteskit.sty)
+% Nota: los estilos de listings tienen espacio de nombres global; por eso los
+%       estilos de C usan nombres propios (prefijo C) para no colisionar con
+%       los de otros lenguajes (p. ej. IntelliJLight/IntelliJDark de Java).
+% ══════════════════════════════════════════════════════════════════════════════
+
+\RequirePackage{listings}
+\RequirePackage{xcolor}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% SECCIÓN: Paletas de color
+% ══════════════════════════════════════════════════════════════════════════════
+% Colores del tema IntelliJ/Darcula para C. Se definen con nombres propios
+% (sufijo C) para que el módulo sea autónomo: no depende de que el módulo de
+% Java esté cargado, y evita colisiones si ambos se cargan a la vez.
+% ──────────────────────────────────────────────────────────────────────────────
+\definecolor{darculaBackgroundC}{HTML}{2B2B2B}
+\definecolor{darculaForegroundC}{HTML}{A9B7C6}
+\definecolor{darculaCommentC}{HTML}{808080}
+\definecolor{darculaKeywordC}{HTML}{CC7832}
+\definecolor{darculaStringC}{HTML}{6A8759}
+\definecolor{darculaNumberC}{HTML}{6897BB}
+\definecolor{darculaDirectiveC}{HTML}{BBB529}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% SECCIÓN: Lenguaje C extendido
+% ══════════════════════════════════════════════════════════════════════════════
+% Dialecto de C basado en el lenguaje C de listings, añadiendo tipos de ancho
+% fijo y la palabra main como keyword de segunda clase (keywordstyle índice 2),
+% para poder darle un estilo propio si se desea. Los directivos de preprocesador
+% (#include, #define, ...) los maneja listings vía la opción directivestyle.
+% ──────────────────────────────────────────────────────────────────────────────
+\lstdefinelanguage{CNotesKit}[ANSI]{C}{
+    morekeywords=[2]{main},
+    morekeywords={size_t,int8_t,int16_t,int32_t,int64_t,%
+        uint8_t,uint16_t,uint32_t,uint64_t,bool,true,false}
+}
+
+% ┌─────────────────────────────────────────────────────────────────────────────
+% │ Estilo: CLionDark
+% ├─────────────────────────────────────────────────────────────────────────────
+% │ Descripción: Tema oscuro (Darcula) para bloques de C, al estilo de CLion.
+% │   Comparte paleta con el IntelliJDark de Java, adaptado a C (directivas de
+% │   preprocesador, tipos).
+% │ Uso:
+% │   \begin{lstlisting}[style=CLionDark] ... \end{lstlisting}
+% └─────────────────────────────────────────────────────────────────────────────
+\lstdefinestyle{CLionDark}{
+    language=CNotesKit,
+    backgroundcolor=\color{darculaBackgroundC},
+    basicstyle=\color{darculaForegroundC}\ttfamily\footnotesize,
+    commentstyle=\color{darculaCommentC}\itshape,
+    keywordstyle=\color{darculaKeywordC}\bfseries,
+    keywordstyle=[2]\color{darculaKeywordC}\bfseries,
+    stringstyle=\color{darculaStringC},
+    directivestyle=\color{darculaDirectiveC},
+    numberstyle=\tiny\color{darculaCommentC},
+    stepnumber=1,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    frame=single,
+    rulecolor=\color{darculaBackgroundC},
+    tabsize=4,
+    breaklines=true,
+    breakatwhitespace=true,
+    captionpos=b
+}
+
+% ┌─────────────────────────────────────────────────────────────────────────────
+% │ Estilo: CLionLight
+% ├─────────────────────────────────────────────────────────────────────────────
+% │ Descripción: Tema claro para bloques de C, al estilo de CLion. Comparte
+% │   paleta con el IntelliJLight de Java, adaptado a C (directivas de
+% │   preprocesador, tipos).
+% │ Uso:
+% │   \begin{lstlisting}[style=CLionLight] ... \end{lstlisting}
+% └─────────────────────────────────────────────────────────────────────────────
+\lstdefinestyle{CLionLight}{
+    language=CNotesKit,
+    backgroundcolor=\color{white},
+    basicstyle=\ttfamily\footnotesize,
+    commentstyle=\color{gray!60!black}\itshape,
+    keywordstyle=\color{blue!80!black}\bfseries,
+    keywordstyle=[2]\color{blue!80!black}\bfseries,
+    identifierstyle=\color{black},
+    stringstyle=\color{orange!80!black},
+    directivestyle=\color{purple!70!black},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4,
+    frame=single,
+    rulecolor=\color{gray!30},
+    breaklines=true,
+    captionpos=b
+}

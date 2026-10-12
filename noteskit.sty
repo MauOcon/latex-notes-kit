@@ -13,6 +13,7 @@
 \newif\ifnk@code
 \newif\ifnk@showAnswers
 \newif\ifnk@codejava
+\newif\ifnk@codec
 \newif\ifnk@formulary
 
 
@@ -52,6 +53,7 @@
 	sections/.is if = nk@sections,            % carga noteskit-sections.sty
 	code/.is if     = nk@code,                % carga noteskit-code.	
     codejava/.is if     = nk@codejava,                % carga noteskit-code.
+    codec/.is if        = nk@codec,                   % carga noteskit-code_c (estilos C)
     formulary/.is if 		= nk@formulary,			% carga noteskit-formulary	
     %
     % --- Preguntas ---
@@ -130,8 +132,12 @@
 \RequirePackage{noteskit-code}
 \fi
 
-\ifnk@code
+\ifnk@codejava
 \RequirePackage{noteskit-code_java}
+\fi
+
+\ifnk@codec
+\RequirePackage{noteskit-code_c}
 \fi
 
 \ifnk@formulary
